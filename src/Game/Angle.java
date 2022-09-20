@@ -1,4 +1,4 @@
-package Tank;
+package Game;
 
 //DO NOT MODIFY THIS FILE!
 
@@ -23,10 +23,12 @@ public class Angle {
         }
     }
 
+    //Return true if the this.value == a.value
     public boolean compare(Angle a) {
         return this.value == a.getValue();
     }
 
+    //Make this 1 degree closer to Angle a
     public void update(Angle a) {
         if (this.value > a.getValue()) {
             if (this.value - a.getValue() >= 180) {

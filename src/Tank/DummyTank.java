@@ -6,11 +6,11 @@ import Game.Angle;
 import java.awt.Color;
 import java.util.HashSet;
 
-public class DallinTank extends ITank{
-    public final String tankName = "Clifford";
-    public final Color tankColor = Color.BLUE;
+public class DummyTank extends ITank{
+    public final String tankName = "Dummy";
+    public final Color tankColor = Color.RED;
 
-    public DallinTank(double xPosition, double yPosition, Angle startAngle, int gameboardWidth, int gameboardHeight) {
+    public DummyTank(double xPosition, double yPosition, Angle startAngle, int gameboardWidth, int gameboardHeight) {
         this.position = new double[]{xPosition, yPosition};
         this.currentHeading = new Angle(startAngle.getValue());
         this.newHeading = new Angle(startAngle.getValue());
@@ -31,16 +31,11 @@ public class DallinTank extends ITank{
     @Override
     public void runTime(ITank[] gameTanks, HashSet<Bullet> bullets) {
         this.moveTank();
-
-        if (this.position[1] < 2) {
-            this.setNewHeading(225);
-        }
-        if (this.position[0] < 2) {
-            this.setNewHeading(145);
-        }
+        this.setNewHeading(225);
 
     }
 
     //Your methods here:
 
 }
+

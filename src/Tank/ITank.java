@@ -6,37 +6,29 @@ and methods defined here useful when implementing your own tanks.
 
 package Tank;
 
+import java.awt.Color;
 import java.lang.Math;
+import java.util.HashSet;
+
+import Game.Angle;
+import Bullet.Bullet;
 
 public abstract class ITank {
-    protected int health;
-    protected boolean moving;
+    protected int health = 5;
+    protected boolean moving = false;
+    private final Angle previousHeading = new Angle();
+    public static final int TANK_WIDTH = 25;
+    public static final int TANK_HEIGHT = 50;
+    public static final double TANK_SPEED = 1.0;
     protected double[] position;
-    protected Angle currentAngle;
-    protected Angle newAngle;
-    private final double TANK_SPEED = 2.0;
+    private double deltaX;
+    private double deltaY;
+    protected int GAMEBOARD_WIDTH;
+    protected int GAMEBOARD_HEIGHT;
 
-    /*
-    Default constructor for your tank.
-     */
-    public ITank() {
-        this.health = 10;
-        this.moving = false;
-        this.position = new double[]{0.0,0.0};
-        this.currentAngle = new Angle();
-        this.newAngle = new Angle();
-    }
+    protected Angle currentHeading;
+    protected Angle newHeading;
 
-    /*
-    Secondary constructor with parameters.
-     */
-    public ITank(double xPosition, double yPosition, Angle startAngle) {
-        this.health = 5;
-        this.moving = false;
-        this.position = new double[]{xPosition, yPosition};
-        this.currentAngle = new Angle(startAngle.getValue());
-        this.newAngle = new Angle(startAngle.getValue());
-    }
 
     /*
     Returns the health of your tank.
@@ -48,7 +40,7 @@ public abstract class ITank {
     /*
     Decreases your tank's health. This function will be called when your tank is shot.
      */
-    public void decrementHealth() {
+    private void decrementHealth() {
         this.health -= 1;
     }
 
@@ -65,8 +57,8 @@ public abstract class ITank {
     Returns the current angle/heading of your tank.
     The return value is of class type Angle. See Tank/Angle.java.
      */
-    public Angle getCurrentAngle() {
-        return this.currentAngle;
+    public Angle getCurrentHeading() {
+        return this.currentHeading;
     }
 
     /*
@@ -94,43 +86,45 @@ public abstract class ITank {
     Use this method to set the desired heading for your tank. With each game tick, your tank will rotate towards
     the new heading. Note that your tank will rotate regardless if it is moving or not.
      */
-    protected void setNewAngle(int value) {
+    protected void setNewHeading(int value) {
         if (value >= 360) {
             value -= 360;
         }
         else if (value < 0) {
             value += 360;
         }
-        this.newAngle.setValue(value);
+        this.newHeading.setValue(value);
+    }
+
+    protected void fireBullet() {
+
     }
 
     /*
     This function is called every game tick. It handles moving, rotating, being shot, dying, etc.
      */
-    public void autoRunTime() {
-        //Update newAngle if not equal with currentAngle
-        this.currentAngle.update(this.newAngle);
+    public void autoRunTime(ITank[] gameTanks, HashSet<Bullet> bullets) {
+        //Update currentAngle if not equal with newAngle
+        this.currentHeading.update(this.newHeading);
 
         //Move tank if moving
         if (this.moving) {
-            double curAngleValue = this.currentAngle.getValue();
-            boolean reflectAcrossOrigin = false;
-            if (curAngleValue > 180.0) {
-                curAngleValue -= 180.0;
-                reflectAcrossOrigin = true;
-            }
-            curAngleValue = curAngleValue * Math.PI / 180.0;
-
-            double deltaY = this.TANK_SPEED * Math.sin(curAngleValue);
-            double deltaX = this.TANK_SPEED * Math.cos(curAngleValue);
-
-            if (reflectAcrossOrigin) {
-                deltaY *= -1.0;
-                deltaX *= -1.0;
+            //Turn tank if this.previousAngle != this.currentAngle
+            if (!this.previousHeading.compare(this.currentHeading)) {
+                int curAngleValue = this.currentHeading.getValue();
+                this.previousHeading.setValue(curAngleValue);
+                double curAngleRad = Math.toRadians(curAngleValue);
+                this.deltaY = TANK_SPEED * Math.sin(curAngleRad);
+                this.deltaX = TANK_SPEED * Math.cos(curAngleRad);
             }
 
-            this.position[0] += deltaX;
-            this.position[1] += deltaY;
+            //Do not add if against walls
+            if (this.position[0] + this.deltaX > 0 && this.position[0] + this.deltaX < this.GAMEBOARD_WIDTH) {
+                this.position[0] += this.deltaX;
+            }
+            if (this.position[1] + this.deltaY > 0 && this.position[1] + this.deltaY < this.GAMEBOARD_HEIGHT) {
+                this.position[1] += this.deltaY;
+            }
         }
 
     }
@@ -143,7 +137,7 @@ public abstract class ITank {
     /*
     This method will return the color of your tank as defined in your own tank class.
      */
-    public abstract String getTankColor();
+    public abstract Color getTankColor();
 
     /*
     This function is also called every game tick. You must implement this method in your own tank class.
@@ -152,6 +146,6 @@ public abstract class ITank {
         1. An array of all the tanks on the field. Use this to access other tank positions and headings.
         2. An array of all bullets on the field. Use this to access bullet positions and headings.
      */
-    public abstract void runTime();
+    public abstract void runTime(ITank[] gameTanks,  HashSet<Bullet> bullets);
 
 }

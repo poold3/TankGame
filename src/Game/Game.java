@@ -1,22 +1,26 @@
 package Game;
 import Tank.*;
-import java.time.*;
+import Bullet.*;
+
+import javax.swing.*;
+import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.*;
-import java.awt.Graphics;
-import java.awt.Color;
 
 public class Game {
     private long startTime;
-    private final long TICK_LENGTH_MILLI = 25;
-    private final int GAMEBOARD_WIDTH = 1200;
-    private final int GAMEBOARD_HEIGHT = 800;
+    private final int TANK_WIDTH = 25;
+    private final int TANK_HEIGHT = 40;
+    private final long TICK_LENGTH_MILLI = 10;
+    private final int GAMEBOARD_WIDTH;
+    private final int GAMEBOARD_HEIGHT;
     private boolean inGame;
 
-    public Game() {
+    public Game(int width, int height) {
         this.startTime = 0;
         this.inGame = false;
+        this.GAMEBOARD_WIDTH = width;
+        this.GAMEBOARD_HEIGHT = height;
     }
 
     public void runGame(ITank[] tanks) {
@@ -24,9 +28,15 @@ public class Game {
         this.inGame = true;
 
         ITank[] gameTanks = tanks.clone();
+        HashSet<Bullet> gameBullets = new HashSet<>();
 
         //Create the game board
-        GameBoard gameBoard = new GameBoard("TankGame!", GAMEBOARD_WIDTH, GAMEBOARD_HEIGHT,gameTanks);
+        JFrame jFrame = new JFrame("TankGame!");
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setSize(this.GAMEBOARD_WIDTH + 25, this.GAMEBOARD_HEIGHT + 50);
+        GamePaint gamePaint = new GamePaint(this.TANK_WIDTH, this.TANK_HEIGHT);
+        jFrame.add(gamePaint);
+        jFrame.setVisible(true);
 
 
         //Define what happens during the game tick
@@ -34,7 +44,7 @@ public class Game {
         TimerTask tt = new TimerTask() {
             @Override
             public void run() {
-                //Base cases for winning and ties
+                //Base cases for end of game.
                 if (gameTanks.length == 1) {
                     System.out.println(gameTanks[0].getTankName() + " won the game! Congrats!");
                     inGame = false;
@@ -48,23 +58,16 @@ public class Game {
 
                 //Update all tank positions and angles
                 for (ITank tank: gameTanks) {
-                    tank.autoRunTime();
+                    tank.autoRunTime(gameTanks, gameBullets);
                 }
 
-                //Perform each tanks runTime function
+                //Perform each tank's personal runTime function
                 for (ITank tank: gameTanks) {
-                    tank.runTime();
+                    tank.runTime(gameTanks, gameBullets);
                 }
 
                 //Redraw tanks/bullets
-                gameBoard.tickPaint(gameTanks);
-
-                //Time out
-                if (System.currentTimeMillis() - startTime > 60000) {
-                    System.out.println("Stop Game");
-                    inGame = false;
-                    t.cancel();
-                }
+                gamePaint.paintTick(gameTanks);
             }
         };
 
