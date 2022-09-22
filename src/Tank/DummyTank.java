@@ -4,18 +4,19 @@ import Bullet.Bullet;
 import Game.Angle;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class DummyTank extends ITank{
     public final String tankName = "Dummy";
     public final Color tankColor = Color.RED;
 
-    public DummyTank(double xPosition, double yPosition, Angle startAngle, int gameboardWidth, int gameboardHeight) {
+    private boolean test = false;
+
+    public DummyTank(double xPosition, double yPosition, Angle startAngle) {
         this.position = new double[]{xPosition, yPosition};
         this.currentHeading = new Angle(startAngle.getValue());
         this.newHeading = new Angle(startAngle.getValue());
-        this.GAMEBOARD_WIDTH = gameboardWidth;
-        this.GAMEBOARD_HEIGHT = gameboardHeight;
     }
 
     @Override
@@ -29,9 +30,20 @@ public class DummyTank extends ITank{
     }
 
     @Override
-    public void runTime(ITank[] gameTanks, HashSet<Bullet> bullets) {
+    public int hashCode() {
+        return this.tankName.hashCode();
+    }
+    @Override
+    public void runTime(ArrayList<ITank> gameTanks) {
         this.moveTank();
-        this.setNewHeading(225);
+        if (test) {
+            this.setNewHeading(this.currentHeading.getValue() + 1);
+            test = false;
+        }
+        else {
+            test = true;
+        }
+
 
     }
 

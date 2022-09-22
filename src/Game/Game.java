@@ -3,38 +3,34 @@ import Tank.*;
 import Bullet.*;
 
 import javax.swing.*;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Game {
     private long startTime;
-    private final int TANK_WIDTH = 25;
-    private final int TANK_HEIGHT = 40;
     private final long TICK_LENGTH_MILLI = 10;
-    private final int GAMEBOARD_WIDTH;
-    private final int GAMEBOARD_HEIGHT;
+    public static final int GAMEBOARD_WIDTH = 1200;
+    public static final int GAMEBOARD_HEIGHT = 800;
     private boolean inGame;
 
-    public Game(int width, int height) {
+    public Game() {
         this.startTime = 0;
         this.inGame = false;
-        this.GAMEBOARD_WIDTH = width;
-        this.GAMEBOARD_HEIGHT = height;
     }
 
-    public void runGame(ITank[] tanks) {
+    public void runGame(ArrayList<ITank> tanks) {
         this.startTime = System.currentTimeMillis();
         this.inGame = true;
 
-        ITank[] gameTanks = tanks.clone();
-        HashSet<Bullet> gameBullets = new HashSet<>();
+        //Clear Bullets
+        Bullet.bullets.clear();
 
         //Create the game board
         JFrame jFrame = new JFrame("TankGame!");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setSize(this.GAMEBOARD_WIDTH + 25, this.GAMEBOARD_HEIGHT + 50);
-        GamePaint gamePaint = new GamePaint(this.TANK_WIDTH, this.TANK_HEIGHT);
+        jFrame.setSize(Game.GAMEBOARD_WIDTH + 25, Game.GAMEBOARD_HEIGHT + 50);
+        GamePaint gamePaint = new GamePaint();
         jFrame.add(gamePaint);
         jFrame.setVisible(true);
 
@@ -45,29 +41,32 @@ public class Game {
             @Override
             public void run() {
                 //Base cases for end of game.
-                if (gameTanks.length == 1) {
-                    System.out.println(gameTanks[0].getTankName() + " won the game! Congrats!");
+                if (tanks.size() == 1) {
+                    System.out.println(tanks.get(0).getTankName() + " won the game! Congrats!");
                     inGame = false;
                     t.cancel();
                 }
-                else if (gameTanks.length == 0) {
+                else if (tanks.size() == 0) {
                     System.out.println("Looks like a draw!");
                     inGame = false;
                     t.cancel();
                 }
 
+                //Update all bullet positions
+                Bullet.updatePositions();
+
                 //Update all tank positions and angles
-                for (ITank tank: gameTanks) {
-                    tank.autoRunTime(gameTanks, gameBullets);
+                for (ITank tank: tanks) {
+                    tank.autoRunTime(tanks);
                 }
 
                 //Perform each tank's personal runTime function
-                for (ITank tank: gameTanks) {
-                    tank.runTime(gameTanks, gameBullets);
+                for (ITank tank: tanks) {
+                    tank.runTime(tanks);
                 }
 
                 //Redraw tanks/bullets
-                gamePaint.paintTick(gameTanks);
+                gamePaint.paintTick(tanks);
             }
         };
 

@@ -1,20 +1,17 @@
 package Game;
 
+import Bullet.Bullet;
 import Tank.ITank;
-import Game.Angle;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 public class GamePaint extends JPanel {
-    private final int tankWidth;
-    private final int tankHeight;
-    private ITank[] gameTanks;
-    public GamePaint(int tankWidth, int tankHeight) {
+    private ArrayList<ITank> gameTanks;
+    public GamePaint() {
         setBackground(Color.WHITE);
-        this.tankWidth = tankWidth;
-        this.tankHeight = tankHeight;
     }
 
     @Override
@@ -22,6 +19,16 @@ public class GamePaint extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        //Draw bullets
+        for (Bullet bullet: Bullet.bullets) {
+            g2d.setColor(Color.BLACK);
+            //Get bullet position
+            double[] position = bullet.getPosition();
+            //Make bullet body
+            g2d.fillOval((int)(position[0] - Bullet.BULLET_RADIUS), (int)position[1], (int)(Bullet.BULLET_RADIUS * 2), (int)(Bullet.BULLET_RADIUS * 2));
+        }
+
+        //Draw tanks
         for (ITank tank: this.gameTanks) {
             //Set the paint color
             g2d.setColor(tank.getTankColor());
@@ -29,9 +36,9 @@ public class GamePaint extends JPanel {
             //Get tank position
             double[] position = tank.getPosition();
             //Make tank body
-            double topLeft = position[0] - this.tankWidth/2.0;
-            double topRight = position[1] - this.tankHeight/2.0;
-            Rectangle2D body = new Rectangle2D.Double(topLeft, topRight, this.tankWidth, this.tankHeight);
+            double topLeft = position[0] - ITank.TANK_WIDTH/2.0;
+            double topRight = position[1] - ITank.TANK_HEIGHT/2.0;
+            Rectangle2D body = new Rectangle2D.Double(topLeft, topRight, ITank.TANK_WIDTH, ITank.TANK_HEIGHT);
             //Make tank turret
             Rectangle2D turret = new Rectangle2D.Double(position[0] - 2.0, topRight - 8.0, 4.0, 8.0);
 
@@ -44,7 +51,7 @@ public class GamePaint extends JPanel {
         }
     }
 
-    public void paintTick(ITank[] gameTanks) {
+    public void paintTick(ArrayList<ITank> gameTanks) {
         this.gameTanks = gameTanks;
         repaint();
     }

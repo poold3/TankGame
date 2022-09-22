@@ -8,24 +8,23 @@ package Tank;
 
 import java.awt.Color;
 import java.lang.Math;
+import java.util.ArrayList;
 import java.util.HashSet;
 
-import Game.Angle;
+import Game.*;
 import Bullet.Bullet;
 
 public abstract class ITank {
     protected int health = 5;
     protected boolean moving = false;
-    private final Angle previousHeading = new Angle();
+    private final Angle previousHeading = new Angle(-1);
     public static final int TANK_WIDTH = 25;
-    public static final int TANK_HEIGHT = 50;
+    public static final int TANK_HEIGHT = 40;
     public static final double TANK_SPEED = 1.0;
     protected double[] position;
     private double deltaX;
     private double deltaY;
-    protected int GAMEBOARD_WIDTH;
-    protected int GAMEBOARD_HEIGHT;
-
+    protected long lastBulletFired = 0;
     protected Angle currentHeading;
     protected Angle newHeading;
 
@@ -96,14 +95,25 @@ public abstract class ITank {
         this.newHeading.setValue(value);
     }
 
+    /*
+    Fires a bullet from the tank. 2 second cool down.
+     */
     protected void fireBullet() {
-
+        long curTime = System.currentTimeMillis();
+        if (curTime - this.lastBulletFired > 2000) {
+            int curAngleValue = this.currentHeading.getValue();
+            double curAngleRad = Math.toRadians(curAngleValue);
+            double startY = ITank.TANK_HEIGHT * Math.sin(curAngleRad);
+            double startX = ITank.TANK_HEIGHT * Math.cos(curAngleRad);
+            Bullet.bullets.add(new Bullet(this.position[0] + startX, this.position[1] + startY, curAngleValue));
+            this.lastBulletFired = curTime;
+        }
     }
 
     /*
     This function is called every game tick. It handles moving, rotating, being shot, dying, etc.
      */
-    public void autoRunTime(ITank[] gameTanks, HashSet<Bullet> bullets) {
+    public void autoRunTime(ArrayList<ITank> gameTanks) {
         //Update currentAngle if not equal with newAngle
         this.currentHeading.update(this.newHeading);
 
@@ -119,16 +129,18 @@ public abstract class ITank {
             }
 
             //Do not add if against walls
-            if (this.position[0] + this.deltaX > 0 && this.position[0] + this.deltaX < this.GAMEBOARD_WIDTH) {
+            if (this.position[0] + this.deltaX > 0 && this.position[0] + this.deltaX < Game.GAMEBOARD_WIDTH) {
                 this.position[0] += this.deltaX;
             }
-            if (this.position[1] + this.deltaY > 0 && this.position[1] + this.deltaY < this.GAMEBOARD_HEIGHT) {
+            if (this.position[1] + this.deltaY > 0 && this.position[1] + this.deltaY < Game.GAMEBOARD_HEIGHT) {
                 this.position[1] += this.deltaY;
             }
         }
 
     }
 
+    @Override
+    public abstract int hashCode();
     /*
     This method will return the name of your tank as defined in your own tank class.
      */
@@ -146,6 +158,6 @@ public abstract class ITank {
         1. An array of all the tanks on the field. Use this to access other tank positions and headings.
         2. An array of all bullets on the field. Use this to access bullet positions and headings.
      */
-    public abstract void runTime(ITank[] gameTanks,  HashSet<Bullet> bullets);
+    public abstract void runTime(ArrayList<ITank> gameTanks);
 
 }

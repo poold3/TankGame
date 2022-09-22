@@ -1,19 +1,19 @@
 import Game.*;
 import Tank.*;
 
+import java.util.ArrayList;
+
 public class Main {
 
-    public static final int GAMEBOARD_WIDTH = 1200;
-    public static final int GAMEBOARD_HEIGHT = 800;
     public static void main(String[] args) {
         try {
             System.out.println("Welcome to TankGame!");
-            Game myTankGame = new Game(GAMEBOARD_WIDTH, GAMEBOARD_HEIGHT);
+            Game myTankGame = new Game();
 
             //Create tanks array.
-            ITank[] tanks = new ITank[]{new DallinTank(250.0, 250.0, new Angle(300), GAMEBOARD_WIDTH, GAMEBOARD_HEIGHT),
-                    new DummyTank(550.0, 250.0, new Angle(0), GAMEBOARD_WIDTH, GAMEBOARD_HEIGHT)};
-
+            ArrayList<ITank> tanks = new ArrayList<>();
+            tanks.add(new DallinTank(450.0, 400.0, new Angle(45)));
+            tanks.add(new DummyTank(700.0, 500.0, new Angle(145)));
             myTankGame.runGame(tanks);
         }
         catch (Exception e) {
