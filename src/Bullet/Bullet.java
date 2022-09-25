@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 public class Bullet {
     public static int id = 0;
-    public static final double BULLET_SPEED = 3.0;
+    public static final double BULLET_SPEED = 5.0;
     public static final double BULLET_RADIUS = 2.0;
     public static final HashSet<Bullet> bullets = new HashSet<>();
     private final double[] position;

@@ -39,7 +39,7 @@ public class Angle {
             }
         }
         else if (this.value < a.getValue()) {
-            if (a.getValue() - this.value >= 180) {
+            if (a.getValue() - this.value > 180) {
                 this.decrement();
             }
             else {

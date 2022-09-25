@@ -5,6 +5,7 @@ import Tank.ITank;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class GamePaint extends JPanel {
             //Get bullet position
             double[] position = bullet.getPosition();
             //Make bullet body
-            g2d.fillOval((int)(position[0] - Bullet.BULLET_RADIUS), (int)position[1], (int)(Bullet.BULLET_RADIUS * 2), (int)(Bullet.BULLET_RADIUS * 2));
+            g2d.fillOval((int)Math.round(position[0] - Bullet.BULLET_RADIUS), (int)Math.round(position[1]), (int)Math.round(Bullet.BULLET_RADIUS * 2), (int)Math.round(Bullet.BULLET_RADIUS * 2));
         }
 
         //Draw tanks
@@ -48,6 +49,13 @@ public class GamePaint extends JPanel {
             g2d.fill(body);
             g2d.fill(turret);
             g2d.rotate(-1 * Math.toRadians(curAngle - 270), position[0], position[1]);
+
+            int curTurretAngle = tank.getCurrentTurretHeading().getValue();
+            double curAngleRad = Math.toRadians(curTurretAngle);
+            double deltaY = 50.0 * Math.sin(curAngleRad);
+            double deltaX = 50.0 * Math.cos(curAngleRad);
+            Line2D line = new Line2D.Double(position[0], position[1],position[0]  + deltaX, position[1]  + deltaY);
+            g2d.draw(line);
         }
     }
 

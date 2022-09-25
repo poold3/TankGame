@@ -20,13 +20,15 @@ public abstract class ITank {
     private final Angle previousHeading = new Angle(-1);
     public static final int TANK_WIDTH = 25;
     public static final int TANK_HEIGHT = 40;
-    public static final double TANK_SPEED = 1.0;
+    public static final double TANK_SPEED = 2.0;
     protected double[] position;
     private double deltaX;
     private double deltaY;
     protected long lastBulletFired = 0;
     protected Angle currentHeading;
     protected Angle newHeading;
+    protected Angle currentTurretHeading;
+    protected Angle newTurretHeading;
 
 
     /*
@@ -54,10 +56,18 @@ public abstract class ITank {
 
     /*
     Returns the current angle/heading of your tank.
-    The return value is of class type Angle. See Tank/Angle.java.
+    The return value is of class type Angle. See Game.Angle.java.
      */
     public Angle getCurrentHeading() {
         return this.currentHeading;
+    }
+
+    /*
+    Returns the current angle/heading of your turret.
+    The return value is of class type Angle. See Game.Angle.java.
+     */
+    public Angle getCurrentTurretHeading() {
+        return this.currentTurretHeading;
     }
 
     /*
@@ -96,12 +106,26 @@ public abstract class ITank {
     }
 
     /*
+    Use this method to set the desired heading for your turret. With each game tick, your turret will rotate towards
+    the new heading. Note that your turret will rotate regardless if it is moving or not.
+     */
+    protected void setNewTurretHeading(int value) {
+        if (value >= 360) {
+            value -= 360;
+        }
+        else if (value < 0) {
+            value += 360;
+        }
+        this.newTurretHeading.setValue(value);
+    }
+
+    /*
     Fires a bullet from the tank. 2 second cool down.
      */
     protected void fireBullet() {
         long curTime = System.currentTimeMillis();
         if (curTime - this.lastBulletFired > 2000) {
-            int curAngleValue = this.currentHeading.getValue();
+            int curAngleValue = this.currentTurretHeading.getValue();
             double curAngleRad = Math.toRadians(curAngleValue);
             double startY = ITank.TANK_HEIGHT * Math.sin(curAngleRad);
             double startX = ITank.TANK_HEIGHT * Math.cos(curAngleRad);
@@ -116,6 +140,7 @@ public abstract class ITank {
     public void autoRunTime(ArrayList<ITank> gameTanks) {
         //Update currentAngle if not equal with newAngle
         this.currentHeading.update(this.newHeading);
+        this.currentTurretHeading.update(this.newTurretHeading);
 
         //Move tank if moving
         if (this.moving) {

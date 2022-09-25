@@ -9,7 +9,7 @@ import java.util.TimerTask;
 
 public class Game {
     private long startTime;
-    private final long TICK_LENGTH_MILLI = 10;
+    private final long TICK_LENGTH_MILLI = 15;
     public static final int GAMEBOARD_WIDTH = 1200;
     public static final int GAMEBOARD_HEIGHT = 800;
     private boolean inGame;

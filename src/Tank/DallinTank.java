@@ -11,10 +11,15 @@ public class DallinTank extends ITank{
     public final String tankName = "Clifford";
     public final Color tankColor = Color.BLUE;
 
+    private boolean start = true;
+
     public DallinTank(double xPosition, double yPosition, Angle startAngle) {
         this.position = new double[]{xPosition, yPosition};
-        this.currentHeading = new Angle(startAngle.getValue());
-        this.newHeading = new Angle(startAngle.getValue());
+        int value = startAngle.getValue();
+        this.currentHeading = new Angle(value);
+        this.newHeading = new Angle(value);
+        this.currentTurretHeading = new Angle(value);
+        this.newTurretHeading = new Angle(value);
     }
 
     @Override
@@ -34,12 +39,33 @@ public class DallinTank extends ITank{
 
     @Override
     public void runTime(ArrayList<ITank> gameTanks) {
-        this.moveTank();
+        //Logic for start
+
+        if (start) {
+            this.moveTank();
+            this.setNewHeading(180);
+            this.start = false;
+        }
+
+        //Logic for driving
+        if (this.position[0] < 150 && this.position[1] > 650) {
+                this.setNewHeading(270);
+        }
+        else if (this.position[0] < 150 && this.position[1] < 150) {
+            this.setNewHeading(0);
+        }
+        else if (this.position[0] > 1050 && this.position[1] < 150) {
+            this.setNewHeading(90);
+        }
+        else if (this.position[0] > 1050 && this.position[1] > 650) {
+            this.setNewHeading(180);
+        }
+
+        //Logic for firing bullets
         double[] dummyPosition = gameTanks.get(1).getPosition();
         double xChange = this.position[0] - dummyPosition[0];
         double yChange = this.position[1] - dummyPosition[1];
         double theta = Math.toDegrees(Math.atan(yChange/xChange));
-        //System.out.println(theta);
 
         if (yChange < 0 && xChange > 0) {
             theta += 180;
@@ -50,9 +76,8 @@ public class DallinTank extends ITank{
         else if (yChange > 0 && xChange > 0) {
             theta += 180;
         }
-        this.setNewHeading((int)theta);
+        this.setNewTurretHeading((int)Math.round(theta));
         this.fireBullet();
-
     }
 
     //Your methods here:

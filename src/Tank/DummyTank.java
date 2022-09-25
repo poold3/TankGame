@@ -15,8 +15,11 @@ public class DummyTank extends ITank{
 
     public DummyTank(double xPosition, double yPosition, Angle startAngle) {
         this.position = new double[]{xPosition, yPosition};
-        this.currentHeading = new Angle(startAngle.getValue());
-        this.newHeading = new Angle(startAngle.getValue());
+        int value = startAngle.getValue();
+        this.currentHeading = new Angle(value);
+        this.newHeading = new Angle(value);
+        this.currentTurretHeading = new Angle(value);
+        this.newTurretHeading = new Angle(value);
     }
 
     @Override
@@ -43,6 +46,23 @@ public class DummyTank extends ITank{
         else {
             test = true;
         }
+
+        double[] dummyPosition = gameTanks.get(0).getPosition();
+        double xChange = this.position[0] - dummyPosition[0];
+        double yChange = this.position[1] - dummyPosition[1];
+        double theta = Math.toDegrees(Math.atan(yChange/xChange));
+
+        if (yChange < 0 && xChange > 0) {
+            theta += 180;
+        }
+        else if (yChange > 0 && xChange < 0) {
+            theta += 360;
+        }
+        else if (yChange > 0 && xChange > 0) {
+            theta += 180;
+        }
+        this.setNewTurretHeading((int)Math.round(theta));
+        this.fireBullet();
 
 
     }
