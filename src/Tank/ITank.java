@@ -15,12 +15,12 @@ import Game.*;
 import Bullet.Bullet;
 
 public abstract class ITank {
-    protected int health = 5;
-    protected boolean moving = false;
-    private final Angle previousHeading = new Angle(-1);
     public static final int TANK_WIDTH = 25;
     public static final int TANK_HEIGHT = 40;
     public static final double TANK_SPEED = 2.0;
+    protected int health = 5;
+    protected boolean moving = false;
+    private final Angle previousHeading = new Angle(-1);
     protected double[] position;
     private double deltaX;
     private double deltaY;
@@ -95,12 +95,12 @@ public abstract class ITank {
     Use this method to set the desired heading for your tank. With each game tick, your tank will rotate towards
     the new heading. Note that your tank will rotate regardless if it is moving or not.
      */
-    protected void setNewHeading(int value) {
-        if (value >= 360) {
-            value -= 360;
+    protected void setNewHeading(double value) {
+        if (value >= 360.0) {
+            value -= 360.0;
         }
-        else if (value < 0) {
-            value += 360;
+        else if (value < 0.0) {
+            value += 360.0;
         }
         this.newHeading.setValue(value);
     }
@@ -109,12 +109,12 @@ public abstract class ITank {
     Use this method to set the desired heading for your turret. With each game tick, your turret will rotate towards
     the new heading. Note that your turret will rotate regardless if it is moving or not.
      */
-    protected void setNewTurretHeading(int value) {
-        if (value >= 360) {
-            value -= 360;
+    protected void setNewTurretHeading(double value) {
+        if (value >= 360.0) {
+            value -= 360.0;
         }
-        else if (value < 0) {
-            value += 360;
+        else if (value < 0.0) {
+            value += 360.0;
         }
         this.newTurretHeading.setValue(value);
     }
@@ -122,14 +122,14 @@ public abstract class ITank {
     /*
     Fires a bullet from the tank. 2 second cool down.
      */
-    protected void fireBullet() {
+    protected void fireBullet(HashSet<Bullet> bullets) {
         long curTime = System.currentTimeMillis();
         if (curTime - this.lastBulletFired > 2000) {
-            int curAngleValue = this.currentTurretHeading.getValue();
+            double curAngleValue = this.currentTurretHeading.getValue();
             double curAngleRad = Math.toRadians(curAngleValue);
             double startY = ITank.TANK_HEIGHT * Math.sin(curAngleRad);
             double startX = ITank.TANK_HEIGHT * Math.cos(curAngleRad);
-            Bullet.bullets.add(new Bullet(this.position[0] + startX, this.position[1] + startY, curAngleValue));
+            bullets.add(new Bullet(this.position[0] + startX, this.position[1] + startY, curAngleValue));
             this.lastBulletFired = curTime;
         }
     }
@@ -137,7 +137,7 @@ public abstract class ITank {
     /*
     This function is called every game tick. It handles moving, rotating, being shot, dying, etc.
      */
-    public void autoRunTime(ArrayList<ITank> gameTanks) {
+    public void autoRunTime(ArrayList<ITank> gameTanks, HashSet<Bullet> bullets) {
         //Update currentAngle if not equal with newAngle
         this.currentHeading.update(this.newHeading);
         this.currentTurretHeading.update(this.newTurretHeading);
@@ -146,7 +146,7 @@ public abstract class ITank {
         if (this.moving) {
             //Turn tank if this.previousAngle != this.currentAngle
             if (!this.previousHeading.compare(this.currentHeading)) {
-                int curAngleValue = this.currentHeading.getValue();
+                double curAngleValue = this.currentHeading.getValue();
                 this.previousHeading.setValue(curAngleValue);
                 double curAngleRad = Math.toRadians(curAngleValue);
                 this.deltaY = TANK_SPEED * Math.sin(curAngleRad);
@@ -183,6 +183,6 @@ public abstract class ITank {
         1. An array of all the tanks on the field. Use this to access other tank positions and headings.
         2. An array of all bullets on the field. Use this to access bullet positions and headings.
      */
-    public abstract void runTime(ArrayList<ITank> gameTanks);
+    public abstract void runTime(ArrayList<ITank> gameTanks, HashSet<Bullet> bullets);
 
 }

@@ -4,6 +4,7 @@ import Bullet.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,8 +24,8 @@ public class Game {
         this.startTime = System.currentTimeMillis();
         this.inGame = true;
 
-        //Clear Bullets
-        Bullet.bullets.clear();
+        //Make bullets
+        HashSet<Bullet> bullets = new HashSet<Bullet>();
 
         //Create the game board
         JFrame jFrame = new JFrame("TankGame!");
@@ -53,20 +54,20 @@ public class Game {
                 }
 
                 //Update all bullet positions
-                Bullet.updatePositions();
+                Bullet.updatePositions(bullets);
 
                 //Update all tank positions and angles
                 for (ITank tank: tanks) {
-                    tank.autoRunTime(tanks);
+                    tank.autoRunTime(tanks, bullets);
                 }
 
                 //Perform each tank's personal runTime function
                 for (ITank tank: tanks) {
-                    tank.runTime(tanks);
+                    tank.runTime(tanks, bullets);
                 }
 
                 //Redraw tanks/bullets
-                gamePaint.paintTick(tanks);
+                gamePaint.paintTick(tanks, bullets);
             }
         };
 

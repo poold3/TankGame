@@ -15,7 +15,7 @@ public class DallinTank extends ITank{
 
     public DallinTank(double xPosition, double yPosition, Angle startAngle) {
         this.position = new double[]{xPosition, yPosition};
-        int value = startAngle.getValue();
+        double value = startAngle.getValue();
         this.currentHeading = new Angle(value);
         this.newHeading = new Angle(value);
         this.currentTurretHeading = new Angle(value);
@@ -38,7 +38,7 @@ public class DallinTank extends ITank{
     }
 
     @Override
-    public void runTime(ArrayList<ITank> gameTanks) {
+    public void runTime(ArrayList<ITank> gameTanks, HashSet<Bullet> bullets) {
         //Logic for start
 
         if (start) {
@@ -67,17 +67,17 @@ public class DallinTank extends ITank{
         double yChange = this.position[1] - dummyPosition[1];
         double theta = Math.toDegrees(Math.atan(yChange/xChange));
 
-        if (yChange < 0 && xChange > 0) {
-            theta += 180;
+        if (yChange < 0.0 && xChange > 0.0) {
+            theta += 180.0;
         }
-        else if (yChange > 0 && xChange < 0) {
-            theta += 360;
+        else if (yChange > 0.0 && xChange < 0.0) {
+            theta += 360.0;
         }
-        else if (yChange > 0 && xChange > 0) {
-            theta += 180;
+        else if (yChange > 0.0 && xChange > 0.0) {
+            theta += 180.0;
         }
         this.setNewTurretHeading((int)Math.round(theta));
-        this.fireBullet();
+        this.fireBullet(bullets);
     }
 
     //Your methods here:

@@ -8,11 +8,15 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GamePaint extends JPanel {
     private ArrayList<ITank> gameTanks;
+    private HashSet<Bullet> bullets;
     public GamePaint() {
         setBackground(Color.WHITE);
+        this.gameTanks = new ArrayList<>();
+        this.bullets = new HashSet<>();
     }
 
     @Override
@@ -21,7 +25,7 @@ public class GamePaint extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         //Draw bullets
-        for (Bullet bullet: Bullet.bullets) {
+        for (Bullet bullet: this.bullets) {
             g2d.setColor(Color.BLACK);
             //Get bullet position
             double[] position = bullet.getPosition();
@@ -36,6 +40,7 @@ public class GamePaint extends JPanel {
 
             //Get tank position
             double[] position = tank.getPosition();
+
             //Make tank body
             double topLeft = position[0] - ITank.TANK_WIDTH/2.0;
             double topRight = position[1] - ITank.TANK_HEIGHT/2.0;
@@ -44,13 +49,15 @@ public class GamePaint extends JPanel {
             Rectangle2D turret = new Rectangle2D.Double(position[0] - 2.0, topRight - 8.0, 4.0, 8.0);
 
             //Rotate Graphics. Draw Tank. Rotate Back.
-            int curAngle = tank.getCurrentHeading().getValue();
-            g2d.rotate(Math.toRadians(curAngle - 270), position[0], position[1]);
+            double curAngle = tank.getCurrentHeading().getValue();
+            g2d.rotate(Math.toRadians(curAngle - 270.0), position[0], position[1]);
             g2d.fill(body);
             g2d.fill(turret);
-            g2d.rotate(-1 * Math.toRadians(curAngle - 270), position[0], position[1]);
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(String.format("%d", tank.getHealth()), (int)Math.round(position[0]) - 3, (int)Math.round(position[1]));
+            g2d.rotate(-1 * Math.toRadians(curAngle - 270.0), position[0], position[1]);
 
-            int curTurretAngle = tank.getCurrentTurretHeading().getValue();
+            double curTurretAngle = tank.getCurrentTurretHeading().getValue();
             double curAngleRad = Math.toRadians(curTurretAngle);
             double deltaY = 50.0 * Math.sin(curAngleRad);
             double deltaX = 50.0 * Math.cos(curAngleRad);
@@ -59,8 +66,9 @@ public class GamePaint extends JPanel {
         }
     }
 
-    public void paintTick(ArrayList<ITank> gameTanks) {
+    public void paintTick(ArrayList<ITank> gameTanks, HashSet<Bullet> bullets) {
         this.gameTanks = gameTanks;
+        this.bullets = bullets;
         repaint();
     }
 }

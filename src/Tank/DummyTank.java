@@ -15,7 +15,7 @@ public class DummyTank extends ITank{
 
     public DummyTank(double xPosition, double yPosition, Angle startAngle) {
         this.position = new double[]{xPosition, yPosition};
-        int value = startAngle.getValue();
+        double value = startAngle.getValue();
         this.currentHeading = new Angle(value);
         this.newHeading = new Angle(value);
         this.currentTurretHeading = new Angle(value);
@@ -37,7 +37,7 @@ public class DummyTank extends ITank{
         return this.tankName.hashCode();
     }
     @Override
-    public void runTime(ArrayList<ITank> gameTanks) {
+    public void runTime(ArrayList<ITank> gameTanks, HashSet<Bullet> bullets) {
         this.moveTank();
         if (test) {
             this.setNewHeading(this.currentHeading.getValue() + 1);
@@ -62,7 +62,7 @@ public class DummyTank extends ITank{
             theta += 180;
         }
         this.setNewTurretHeading((int)Math.round(theta));
-        this.fireBullet();
+        this.fireBullet(bullets);
 
 
     }

@@ -9,7 +9,6 @@ public class Bullet {
     public static int id = 0;
     public static final double BULLET_SPEED = 5.0;
     public static final double BULLET_RADIUS = 2.0;
-    public static final HashSet<Bullet> bullets = new HashSet<>();
     private final double[] position;
     private final Angle heading;
     private final double deltaY;
@@ -17,7 +16,7 @@ public class Bullet {
 
     public int bulletId;
 
-    public Bullet(double xPosition, double yPosition, int heading) {
+    public Bullet(double xPosition, double yPosition, double heading) {
         this.position = new double[]{xPosition, yPosition};
         this.heading = new Angle(heading);
         this.bulletId = ++id;
@@ -26,12 +25,12 @@ public class Bullet {
         this.deltaX = Bullet.BULLET_SPEED * Math.cos(curAngleRad);
     }
 
-    public static void updatePositions() {
-        for (Iterator<Bullet> i = Bullet.bullets.iterator(); i.hasNext();) {
+    public static void updatePositions(HashSet<Bullet> bullets) {
+        for (Iterator<Bullet> i = bullets.iterator(); i.hasNext();) {
             Bullet bullet = i.next();
             //Do not add if against walls
-            if (bullet.position[0] + bullet.deltaX > 0 && bullet.position[0] + bullet.deltaX < Game.GAMEBOARD_WIDTH &&
-                    bullet.position[1] + bullet.deltaY > 0 && bullet.position[1] + bullet.deltaY < Game.GAMEBOARD_HEIGHT) {
+            if (bullet.position[0] + bullet.deltaX > -50.0 && bullet.position[0] + bullet.deltaX < Game.GAMEBOARD_WIDTH + 50 &&
+                    bullet.position[1] + bullet.deltaY > -50.0 && bullet.position[1] + bullet.deltaY < Game.GAMEBOARD_HEIGHT + 50) {
                 bullet.position[0] += bullet.deltaX;
                 bullet.position[1] += bullet.deltaY;
             }

@@ -12,8 +12,8 @@ public class Main {
 
             //Create tanks array.
             ArrayList<ITank> tanks = new ArrayList<>();
-            tanks.add(new DallinTank(250.0, 750.0, new Angle(180)));
-            tanks.add(new DummyTank(700.0, 400.0, new Angle(145)));
+            tanks.add(new DallinTank(250.0, 750.0, new Angle(180.0)));
+            tanks.add(new DummyTank(700.0, 400.0, new Angle(145.0)));
             myTankGame.runGame(tanks);
         }
         catch (Exception e) {
