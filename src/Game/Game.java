@@ -48,18 +48,6 @@ public class Game {
         TimerTask tt = new TimerTask() {
             @Override
             public void run() {
-                //Base cases for end of game.
-                if (tanks.size() == 1) {
-                    System.out.println(tanks.get(0).getTankName() + " won the game! Congrats!");
-                    inGame = false;
-                    t.cancel();
-                }
-                else if (tanks.size() == 0) {
-                    System.out.println("Looks like a draw!");
-                    inGame = false;
-                    t.cancel();
-                }
-
                 //Update all bullet positions
                 Bullet.updatePositions(bullets);
 
@@ -81,6 +69,18 @@ public class Game {
 
                 //Redraw tanks/bullets
                 gamePaint.paintTick(tanks, bullets);
+                
+                //Base cases for end of game.
+                if (tanks.size() == 1) {
+                    System.out.println(tanks.get(0).getTankName() + " won the game! Congrats!");
+                    inGame = false;
+                    t.cancel();
+                }
+                else if (tanks.size() == 0) {
+                    System.out.println("Looks like a draw!");
+                    inGame = false;
+                    t.cancel();
+                }
             }
         };
 
