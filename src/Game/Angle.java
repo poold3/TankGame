@@ -1,6 +1,8 @@
+/*
+***************** DO NOT MODIFY THIS FILE! ******************************
+This is the angle class. Use the methods in this class to interact with angles. Angle run from 0.0 to 359.99.
+ */
 package Game;
-
-//DO NOT MODIFY THIS FILE!
 
 public class Angle {
     private double value;

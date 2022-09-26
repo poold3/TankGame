@@ -1,31 +1,37 @@
+/*
+***************** *DO NOT MODIFY THIS FILE! ******************************
+This is the Game class. This class handles the running of the TankGame.
+*YOU MAY ONLY MODIFY TICK_LENGTH_MILLI, GAMEBOARD_WIDTH, AND GAMEBOARD_HEIGHT
+ */
 package Game;
+
 import Tank.*;
 import Bullet.*;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class Game {
     private long startTime;
     private final long TICK_LENGTH_MILLI = 15;
-    public static final int GAMEBOARD_WIDTH = 1200;
-    public static final int GAMEBOARD_HEIGHT = 800;
+    public static final int GAMEBOARD_WIDTH = 800;
+    public static final int GAMEBOARD_HEIGHT = 600;
     private boolean inGame;
 
     public Game() {
+        System.out.println("Welcome to TankGame!");
         this.startTime = 0;
         this.inGame = false;
     }
 
     public void runGame(ArrayList<ITank> tanks) {
+        System.out.println("Running TankGame!");
         this.startTime = System.currentTimeMillis();
         this.inGame = true;
 
         //Make bullets
-        HashSet<Bullet> bullets = new HashSet<Bullet>();
+        HashSet<Bullet> bullets = new HashSet<>();
 
         //Create the game board
         JFrame jFrame = new JFrame("TankGame!");
@@ -57,8 +63,14 @@ public class Game {
                 Bullet.updatePositions(bullets);
 
                 //Update all tank positions and angles
-                for (ITank tank: tanks) {
-                    tank.autoRunTime(tanks, bullets);
+                for (Iterator<ITank> i = tanks.iterator(); i.hasNext();) {
+                    ITank tank = i.next();
+                    tank.autoRunTime(bullets);
+                    //Check tank health. Destroy tank if necessary
+                    if (tank.getHealth() <= 0) {
+                        System.out.println(tank.getTankName() + " has been destroyed!");
+                        i.remove();
+                    }
                 }
 
                 //Perform each tank's personal runTime function

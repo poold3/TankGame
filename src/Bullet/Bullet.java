@@ -1,3 +1,7 @@
+/*
+***************** DO NOT MODIFY THIS FILE! ******************************
+This is the bullet class. The only methods you are allowed to call are getPosition(), getHeading(), and getBulletId()
+ */
 package Bullet;
 
 import Game.*;
@@ -13,9 +17,9 @@ public class Bullet {
     private final Angle heading;
     private final double deltaY;
     private final double deltaX;
-
     public int bulletId;
 
+    //Required constructor
     public Bullet(double xPosition, double yPosition, double heading) {
         this.position = new double[]{xPosition, yPosition};
         this.heading = new Angle(heading);
@@ -25,6 +29,7 @@ public class Bullet {
         this.deltaX = Bullet.BULLET_SPEED * Math.cos(curAngleRad);
     }
 
+    //Static method. Updates the positions of a Hashset of Bullets passed as a parameter.
     public static void updatePositions(HashSet<Bullet> bullets) {
         for (Iterator<Bullet> i = bullets.iterator(); i.hasNext();) {
             Bullet bullet = i.next();

@@ -1,3 +1,7 @@
+/*
+***************** DO NOT MODIFY THIS FILE! ******************************
+This is the GamePaint class. This class handles the visualisation of the TankGame. You do not need anything from this class.
+ */
 package Game;
 
 import Bullet.Bullet;
@@ -55,7 +59,7 @@ public class GamePaint extends JPanel {
             g2d.fill(turret);
             g2d.setColor(Color.BLACK);
             g2d.drawString(String.format("%d", tank.getHealth()), (int)Math.round(position[0]) - 3, (int)Math.round(position[1]));
-            g2d.rotate(-1 * Math.toRadians(curAngle - 270.0), position[0], position[1]);
+            g2d.rotate(-1 * Math.toRadians(curAngle + 90.0), position[0], position[1]);
 
             double curTurretAngle = tank.getCurrentTurretHeading().getValue();
             double curAngleRad = Math.toRadians(curTurretAngle);

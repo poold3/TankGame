@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import Game.*;
 import Bullet.Bullet;
@@ -32,21 +33,21 @@ public abstract class ITank {
 
 
     /*
-    Returns the health of your tank.
+    Returns the health of the tank.
      */
     public int getHealth() {
         return this.health;
     }
 
     /*
-    Decreases your tank's health. This function will be called when your tank is shot.
+    Decreases the tank's health. This function will be called when the tank is shot.
      */
     private void decrementHealth() {
         this.health -= 1;
     }
 
     /*
-    Returns the current position of your tank in an array of doubles.
+    Returns the current position of the tank in an array of doubles.
     this.position[0] = X Coordinate
     this.position[1] = Y Coordinate
      */
@@ -55,7 +56,7 @@ public abstract class ITank {
     }
 
     /*
-    Returns the current angle/heading of your tank.
+    Returns the current angle/heading of the tank.
     The return value is of class type Angle. See Game.Angle.java.
      */
     public Angle getCurrentHeading() {
@@ -63,7 +64,7 @@ public abstract class ITank {
     }
 
     /*
-    Returns the current angle/heading of your turret.
+    Returns the current angle/heading of the turret.
     The return value is of class type Angle. See Game.Angle.java.
      */
     public Angle getCurrentTurretHeading() {
@@ -71,29 +72,29 @@ public abstract class ITank {
     }
 
     /*
-    Returns a true/false value regarding whether your tank is currently moving forward.
+    Returns a true/false value regarding whether the tank is currently moving forward.
      */
     public boolean isMoving() {
         return this.moving;
     }
 
     /*
-    Call this method to start moving your tank forward.
+    Call this method to start moving the tank forward.
      */
     protected void moveTank() {
         this.moving = true;
     }
 
     /*
-    Call this method to stop your tank from moving.
+    Call this method to stop the tank from moving.
      */
     protected void stopTank() {
         this.moving = false;
     }
 
     /*
-    Use this method to set the desired heading for your tank. With each game tick, your tank will rotate towards
-    the new heading. Note that your tank will rotate regardless if it is moving or not.
+    Use this method to set the desired heading for the tank. With each game tick, the tank will rotate towards
+    the new heading. Note that the tank will rotate regardless if it is moving or not.
      */
     protected void setNewHeading(double value) {
         if (value >= 360.0) {
@@ -106,8 +107,8 @@ public abstract class ITank {
     }
 
     /*
-    Use this method to set the desired heading for your turret. With each game tick, your turret will rotate towards
-    the new heading. Note that your turret will rotate regardless if it is moving or not.
+    Use this method to set the desired heading for the turret. With each game tick, the turret will rotate towards
+    the new heading. Note that the turret will rotate regardless if the tank is moving or not.
      */
     protected void setNewTurretHeading(double value) {
         if (value >= 360.0) {
@@ -135,9 +136,39 @@ public abstract class ITank {
     }
 
     /*
-    This function is called every game tick. It handles moving, rotating, being shot, dying, etc.
+    This method is called every game tick. YOU CANNOT CALL THIS METHOD!
+     It handles moving, rotating and being shot for the tank.
      */
-    public void autoRunTime(ArrayList<ITank> gameTanks, HashSet<Bullet> bullets) {
+    public void autoRunTime(HashSet<Bullet> bullets) {
+        double curAngleValue = this.currentHeading.getValue();
+        double curAngleRad = Math.toRadians(curAngleValue);
+
+        //Check if any bullets are hitting the tank
+        for (Iterator<Bullet> i = bullets.iterator(); i.hasNext();) {
+            Bullet bullet = i.next();
+            double[] bulletPosition = bullet.getPosition();
+
+            //Is this bullet in the near vicinity of this tank?
+            if (Math.abs(bulletPosition[0] - this.position[0]) < ITank.TANK_HEIGHT &&
+                    Math.abs(bulletPosition[1] - this.position[1]) < ITank.TANK_HEIGHT) {
+
+                //Calculate new bullet position after rotation around center of tank by currentHeading
+                double bulletRotationRad = Math.toRadians(-1 * (90 - curAngleValue));
+                double xRot = (Math.cos(bulletRotationRad) * (bulletPosition[0] - this.position[0])) - (Math.sin(bulletRotationRad)
+                        * (this.position[1] - bulletPosition[1])) + this.position[0];
+                double yRot = (Math.sin(bulletRotationRad) * (bulletPosition[0] - this.position[0])) + (Math.cos(bulletRotationRad)
+                        * (this.position[1] - bulletPosition[1])) + this.position[1];
+                yRot = (this.position[1] - yRot) + this.position[1];
+
+                if ((this.position[0] - ITank.TANK_WIDTH/2.0) < xRot && xRot < (this.position[0] + ITank.TANK_WIDTH/2.0)
+                        && (this.position[1] - ITank.TANK_HEIGHT/2.0) < yRot && yRot < (this.position[1] + ITank.TANK_HEIGHT/2.0)) {
+                    this.decrementHealth();
+                    i.remove();
+                    System.out.println(this.getTankName() + " has been hit!");
+                }
+            }
+        }
+
         //Update currentAngle if not equal with newAngle
         this.currentHeading.update(this.newHeading);
         this.currentTurretHeading.update(this.newTurretHeading);
@@ -146,9 +177,7 @@ public abstract class ITank {
         if (this.moving) {
             //Turn tank if this.previousAngle != this.currentAngle
             if (!this.previousHeading.compare(this.currentHeading)) {
-                double curAngleValue = this.currentHeading.getValue();
                 this.previousHeading.setValue(curAngleValue);
-                double curAngleRad = Math.toRadians(curAngleValue);
                 this.deltaY = TANK_SPEED * Math.sin(curAngleRad);
                 this.deltaX = TANK_SPEED * Math.cos(curAngleRad);
             }
@@ -181,7 +210,7 @@ public abstract class ITank {
     Within this function you should drive your tank to avoid bullets and shoot other tanks.
     Parameters:
         1. An array of all the tanks on the field. Use this to access other tank positions and headings.
-        2. An array of all bullets on the field. Use this to access bullet positions and headings.
+        2. A set of all bullets on the field. Use this to access bullet positions and headings.
      */
     public abstract void runTime(ArrayList<ITank> gameTanks, HashSet<Bullet> bullets);
 
