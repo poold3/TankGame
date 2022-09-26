@@ -14,7 +14,7 @@ public class Main {
             ArrayList<ITank> tanks = new ArrayList<>();
             //Add tanks here! ONLY ONE TANK OF EACH TANK CLASS IS ALLOWED!
             tanks.add(new DummyOne(400.0, 350.0, new Angle(0.0)));
-            tanks.add(new DummyTwo(250.0, 600.0, new Angle(180.0)));
+            tanks.add(new DummyTwo(250.0, 700.0, new Angle(180.0)));
 
             //Run TankGame!
             myTankGame.runGame(tanks);

@@ -9,14 +9,15 @@ import Tank.*;
 import Bullet.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.*;
 import java.util.Timer;
 
 public class Game {
     private long startTime;
     private final long TICK_LENGTH_MILLI = 15;
-    public static final int GAMEBOARD_WIDTH = 800;
-    public static final int GAMEBOARD_HEIGHT = 600;
+    public static final int GAMEBOARD_WIDTH = 1000;
+    public static final int GAMEBOARD_HEIGHT = 800;
     private boolean inGame;
 
     public Game() {

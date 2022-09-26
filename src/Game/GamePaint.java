@@ -25,6 +25,7 @@ public class GamePaint extends JPanel {
 
     @Override
     public void paintComponent (Graphics g) {
+        setBackground(Color.lightGray);
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
