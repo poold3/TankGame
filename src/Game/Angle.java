@@ -57,12 +57,12 @@ public class Angle {
     }
 
     //Rotate tank counter-clockwise by 1 degree
-    public void increment() {
+    private void increment() {
         this.value = this.value + 1.0 >= 360.0 ? 0.0 : this.value + 1.0;
     }
 
     //Rotate tank clockwise by 1 degree
-    public void decrement() {
+    private void decrement() {
         this.value = this.value - 1.0 < 0.0 ? 359.0 : this.value - 1.0;
     }
 }

@@ -37,7 +37,7 @@ you are trying to do.
 You can create other methods within your tank class but only your runTime method will be
 called by the game. You should use the methods defined in `ITank.java` to help control
 your tank.
-## Usable ITank methods
+## Usable ITank Methods
 ### For All Tanks
 #### getHealth()
 This method returns the current health of a tank. Each tank starts with 5 health points and
@@ -69,13 +69,18 @@ to the desired heading.
 #### fireBullet()
 This method will fire a bullet from your tank's position at the current heading of your tank's turret.
 This method must be passed the Set of bullets that was passed into the `runTime()` method.
-## Usable Bullet methods
+## Usable Bullet Methods
 #### getPosition()
 This method returns an array size 2 of doubles containing the position of a bullet.
 #### getHeading()
 This method returns an Angle describing the direction the bullet is traveling.
 #### getBulletId()
 This method returns an int which represents the bullet's unique id.
+## Usable Angle Methods
+#### getValue()
+This method returns the value of an Angle in degrees as a double.
+#### compare()
+This method returns a boolean describing whether one Angle's value is the same as another.
 ## Constants
 Constants are values that will remain constant during the game. Please note that these values
 can be set differently by users before the game. It is best practice access these values using
