@@ -51,11 +51,15 @@ Use `getCurrentHeading().getValue()` to get the actual value in degrees.
 #### getCurrentTurretHeading()
 This method returns an Angle that describes the direction a tank's turret is currently facing.
 Use `getCurrentHeading().getValue()` to get the actual value in degrees.
-#### isMoving() 
-This method returns a boolean that describes whether a tank is currently moving.
+#### howMoving()
+This method returns a certain value of the driveDirection enum in `ITank.java`. Either Forward, Backward,
+or None.
 ### For Your Tank Only
-#### moveTank()
-This method makes your tank start moving.
+#### moveForward()
+This method makes your tank start moving forward.
+#### moveBackward()
+This method makes your tank start moving backward. Note that your tank will move in the opposite direction of
+your tank's current heading.
 #### stopTank()
 This method makes your tank stop moving.
 #### setNewHeading()

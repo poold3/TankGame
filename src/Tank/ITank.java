@@ -16,11 +16,17 @@ import Game.*;
 import Bullet.Bullet;
 
 public abstract class ITank {
+    public enum driveDirection {
+        Forward,
+        Backward,
+        None
+    }
+
     public static final int TANK_WIDTH = 25;
     public static final int TANK_HEIGHT = 40;
     public static final double TANK_SPEED = 2.0;
     protected int health = 5;
-    protected boolean moving = false;
+    protected driveDirection moving = driveDirection.None;
     private final Angle previousHeading = new Angle(-1);
     protected double[] position;
     private double deltaX;
@@ -74,22 +80,29 @@ public abstract class ITank {
     /*
     Returns a true/false value regarding whether the tank is currently moving forward.
      */
-    public boolean isMoving() {
+    public driveDirection howMoving() {
         return this.moving;
     }
 
     /*
     Call this method to start moving the tank forward.
      */
-    protected void moveTank() {
-        this.moving = true;
+    protected void moveForward() {
+        this.moving = driveDirection.Forward;
+    }
+
+    /*
+    Call this method to start moving the tank forward.
+     */
+    protected void moveBackward() {
+        this.moving = driveDirection.Backward;
     }
 
     /*
     Call this method to stop the tank from moving.
      */
     protected void stopTank() {
-        this.moving = false;
+        this.moving = driveDirection.None;
     }
 
     /*
@@ -174,7 +187,7 @@ public abstract class ITank {
         this.currentTurretHeading.update(this.newTurretHeading);
 
         //Move tank if moving
-        if (this.moving) {
+        if (this.moving != driveDirection.None) {
             //Turn tank if this.previousAngle != this.currentAngle
             if (!this.previousHeading.compare(this.currentHeading)) {
                 this.previousHeading.setValue(curAngleValue);
@@ -183,12 +196,23 @@ public abstract class ITank {
             }
 
             //Do not add if against walls
-            if (this.position[0] + this.deltaX > 0 && this.position[0] + this.deltaX < Game.GAMEBOARD_WIDTH) {
-                this.position[0] += this.deltaX;
+            if (this.moving == driveDirection.Forward) {
+                if (this.position[0] + this.deltaX > 0 && this.position[0] + this.deltaX < Game.GAMEBOARD_WIDTH) {
+                    this.position[0] += this.deltaX;
+                }
+                if (this.position[1] + this.deltaY > 0 && this.position[1] + this.deltaY < Game.GAMEBOARD_HEIGHT) {
+                    this.position[1] += this.deltaY;
+                }
             }
-            if (this.position[1] + this.deltaY > 0 && this.position[1] + this.deltaY < Game.GAMEBOARD_HEIGHT) {
-                this.position[1] += this.deltaY;
+            else if (this.moving == driveDirection.Backward) {
+                if (this.position[0] - this.deltaX > 0 && this.position[0] - this.deltaX < Game.GAMEBOARD_WIDTH) {
+                    this.position[0] -= this.deltaX;
+                }
+                if (this.position[1] - this.deltaY > 0 && this.position[1] - this.deltaY < Game.GAMEBOARD_HEIGHT) {
+                    this.position[1] -= this.deltaY;
+                }
             }
+
         }
 
     }

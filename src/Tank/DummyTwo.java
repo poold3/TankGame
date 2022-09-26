@@ -54,7 +54,7 @@ public class DummyTwo extends ITank{
         //Logic for start
 
         if (start) {
-            this.moveTank();
+            this.moveForward();
             this.setNewHeading(180);
             this.start = false;
         }
@@ -68,7 +68,7 @@ public class DummyTwo extends ITank{
                 this.stopTank();
             }
             else if (this.currentHeading.getValue() == 270) {
-                this.moveTank();
+                this.moveForward();
             }
         }
         else if (this.position[0] < 150 && this.position[1] < 150) {
@@ -81,7 +81,7 @@ public class DummyTwo extends ITank{
                 this.stopTank();
             }
             else if (this.currentHeading.getValue() == 90) {
-                this.moveTank();
+                this.moveForward();
             }
         }
         else if (this.position[0] > (Game.GAMEBOARD_WIDTH - 150) && this.position[1] > (Game.GAMEBOARD_HEIGHT - 150)) {

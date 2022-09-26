@@ -37,7 +37,7 @@ public class DummyOne extends ITank{
     }
     @Override
     public void runTime(ArrayList<ITank> tanks, HashSet<Bullet> bullets) {
-        this.moveTank();
+        this.moveForward();
         if (this.position[0] > (Game.GAMEBOARD_WIDTH - 150)) {
             this.setNewHeading(180);
         }
