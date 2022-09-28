@@ -25,6 +25,7 @@ public abstract class ITank {
     public static final int TANK_WIDTH = 25;
     public static final int TANK_HEIGHT = 40;
     public static final double TANK_SPEED = 2.0;
+    public static final int TURRET_COOLDOWN_MILLI = 2000;
     protected int health = 5;
     protected driveDirection moving = driveDirection.None;
     private final Angle previousHeading = new Angle(-1);
@@ -138,7 +139,7 @@ public abstract class ITank {
      */
     protected void fireBullet(HashSet<Bullet> bullets) {
         long curTime = System.currentTimeMillis();
-        if (curTime - this.lastBulletFired > 2000) {
+        if (curTime - this.lastBulletFired > TURRET_COOLDOWN_MILLI) {
             double curAngleValue = this.currentTurretHeading.getValue();
             double curAngleRad = Math.toRadians(curAngleValue);
             double startY = ITank.TANK_HEIGHT * Math.sin(curAngleRad);

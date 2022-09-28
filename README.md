@@ -101,5 +101,8 @@ The width of each tank. Defined in `ITank.java`.
 The height of each tank. Defined in `ITank.java`.
 ### TANK_SPEED
 The speed of each tank. Defined in `ITank.java`.
+### TURRET_COOLDOWN_MILLI
+The cooldown in milliseconds required after firing your turret before you can fire again.
+Defined in `ITank.java`.
 ### BULLET_SPEED
 The speed of each bullet. Defined in `Bullet.java`.
