@@ -54,7 +54,7 @@ public class GamePaint extends JPanel {
             Rectangle2D turret = new Rectangle2D.Double(position[0] - 2.0, topRight - 8.0, 4.0, 8.0);
 
             //Rotate Graphics. Draw Tank. Rotate Back.
-            double curAngle = tank.getCurrentHeading().getValue();
+            double curAngle = tank.getCurrentHeading();
             g2d.rotate(Math.toRadians(curAngle - 270.0), position[0], position[1]);
             g2d.fill(body);
             g2d.fill(turret);
@@ -62,7 +62,7 @@ public class GamePaint extends JPanel {
             g2d.drawString(String.format("%d", tank.getHealth()), (int)Math.round(position[0]) - 3, (int)Math.round(position[1]));
             g2d.rotate(-1 * Math.toRadians(curAngle + 90.0), position[0], position[1]);
 
-            double curTurretAngle = tank.getCurrentTurretHeading().getValue();
+            double curTurretAngle = tank.getCurrentTurretHeading();
             double curAngleRad = Math.toRadians(curTurretAngle);
             double deltaY = 50.0 * Math.sin(curAngleRad);
             double deltaX = 50.0 * Math.cos(curAngleRad);

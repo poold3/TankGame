@@ -46,11 +46,9 @@ loses 1 every time it is shot.
 This method returns an array size 2 of doubles containing the position of a tank. 
 `double xPosition = getPosition()[0]`. `double yPosition = getPosition()[1]`.
 #### getCurrentHeading()
-This method returns an Angle that describes the direction a tank is currently facing.
-Use `getCurrentHeading().getValue()` to get the actual value in degrees.
+This method returns a double that describes the direction a tank is currently facing in degrees.
 #### getCurrentTurretHeading()
-This method returns an Angle that describes the direction a tank's turret is currently facing.
-Use `getCurrentHeading().getValue()` to get the actual value in degrees.
+This method returns a double that describes the direction a tank's turret is currently facing in degrees.
 #### howMoving()
 This method returns a certain value of the driveDirection enum in `ITank.java`. Either Forward, Backward,
 or None.

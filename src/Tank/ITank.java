@@ -59,23 +59,23 @@ public abstract class ITank {
     this.position[1] = Y Coordinate
      */
     public double[] getPosition() {
-        return this.position;
+        return this.position.clone();
     }
 
     /*
     Returns the current angle/heading of the tank.
     The return value is of class type Angle. See Game.Angle.java.
      */
-    public Angle getCurrentHeading() {
-        return this.currentHeading;
+    public double getCurrentHeading() {
+        return this.currentHeading.getValue();
     }
 
     /*
     Returns the current angle/heading of the turret.
     The return value is of class type Angle. See Game.Angle.java.
      */
-    public Angle getCurrentTurretHeading() {
-        return this.currentTurretHeading;
+    public double getCurrentTurretHeading() {
+        return this.currentTurretHeading.getValue();
     }
 
     /*
