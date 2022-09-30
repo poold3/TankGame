@@ -12,6 +12,14 @@ public class Angle {
     }
 
     public Angle(double value) {
+        while (value < 0.0 || value >= 360.0) {
+            if (value < 0.0) {
+                value += 360.0;
+            }
+            else {
+                value -= 360.0;
+            }
+        }
         this.value = value;
     }
 
@@ -20,9 +28,15 @@ public class Angle {
     }
 
     public void setValue(double value) {
-        if (0.0 <= value && value < 360.0) {
-            this.value = value;
+        while (value < 0.0 || value >= 360.0) {
+            if (value < 0.0) {
+                value += 360.0;
+            }
+            else {
+                value -= 360.0;
+            }
         }
+        this.value = value;
     }
 
     //Return true if the this.value == a.value
@@ -36,6 +50,12 @@ public class Angle {
         //If difference between angles < 1.0, set this.value = aValue
         if (Math.abs(this.value - aValue) < 1.0) {
             this.value = aValue;
+            if (this.value >= 360.0) {
+                this.value -= 360.0;
+            }
+            else if (this.value < 0.0) {
+                this.value += 360.0;
+            }
         }
         //Else, increment or decrement angle by 1.0
         else if (this.value > aValue) {
@@ -58,11 +78,17 @@ public class Angle {
 
     //Rotate tank counter-clockwise by 1 degree
     private void increment() {
-        this.value = this.value + 1.0 >= 360.0 ? 0.0 : this.value + 1.0;
+        this.value = this.value + 1.0;
+        if (this.value >= 360.0) {
+            this.value -= 360.0;
+        }
     }
 
     //Rotate tank clockwise by 1 degree
     private void decrement() {
-        this.value = this.value - 1.0 < 0.0 ? 359.0 : this.value - 1.0;
+        this.value = this.value - 1.0;
+        if (this.value < 0.0) {
+            this.value += 360.0;
+        }
     }
 }

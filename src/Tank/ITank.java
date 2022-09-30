@@ -28,13 +28,13 @@ public abstract class ITank {
     public static final int TURRET_COOLDOWN_MILLI = 2000;
     protected int health = 5;
     protected driveDirection moving = driveDirection.None;
-    private final Angle previousHeading = new Angle(-1);
     protected double[] position;
     private double deltaX;
     private double deltaY;
     protected long lastBulletFired = 0;
     protected Angle currentHeading;
     protected Angle newHeading;
+    protected Angle previousHeading;
     protected Angle currentTurretHeading;
     protected Angle newTurretHeading;
 
@@ -111,11 +111,13 @@ public abstract class ITank {
     the new heading. Note that the tank will rotate regardless if it is moving or not.
      */
     protected void setNewHeading(double value) {
-        if (value >= 360.0) {
-            value -= 360.0;
-        }
-        else if (value < 0.0) {
-            value += 360.0;
+        while (value < 0.0 || value >= 360.0) {
+            if (value >= 360.0) {
+                value -= 360.0;
+            }
+            else {
+                value += 360.0;
+            }
         }
         this.newHeading.setValue(value);
     }
@@ -125,11 +127,13 @@ public abstract class ITank {
     the new heading. Note that the turret will rotate regardless if the tank is moving or not.
      */
     protected void setNewTurretHeading(double value) {
-        if (value >= 360.0) {
-            value -= 360.0;
-        }
-        else if (value < 0.0) {
-            value += 360.0;
+        while (value < 0.0 || value >= 360.0) {
+            if (value >= 360.0) {
+                value -= 360.0;
+            }
+            else {
+                value += 360.0;
+            }
         }
         this.newTurretHeading.setValue(value);
     }
@@ -155,7 +159,6 @@ public abstract class ITank {
      */
     public void autoRunTime(HashSet<Bullet> bullets) {
         double curAngleValue = this.currentHeading.getValue();
-        double curAngleRad = Math.toRadians(curAngleValue);
 
         //Check if any bullets are hitting the tank
         for (Iterator<Bullet> i = bullets.iterator(); i.hasNext();) {
@@ -174,6 +177,7 @@ public abstract class ITank {
                         * (this.position[1] - bulletPosition[1])) + this.position[1];
                 yRot = (this.position[1] - yRot) + this.position[1];
 
+                //See if rotated bullet position lies within non-rotated tank body
                 if ((this.position[0] - ITank.TANK_WIDTH/2.0) < xRot && xRot < (this.position[0] + ITank.TANK_WIDTH/2.0)
                         && (this.position[1] - ITank.TANK_HEIGHT/2.0) < yRot && yRot < (this.position[1] + ITank.TANK_HEIGHT/2.0)) {
                     this.decrementHealth();
@@ -186,6 +190,9 @@ public abstract class ITank {
         //Update currentAngle if not equal with newAngle
         this.currentHeading.update(this.newHeading);
         this.currentTurretHeading.update(this.newTurretHeading);
+
+        curAngleValue = this.currentHeading.getValue();
+        double curAngleRad = Math.toRadians(curAngleValue);
 
         //Move tank if moving
         if (this.moving != driveDirection.None) {

@@ -24,6 +24,7 @@ public class DummyTwo extends ITank{
         double value = startAngle.getValue();
         this.currentHeading = new Angle(value);
         this.newHeading = new Angle(value);
+        this.previousHeading = new Angle(value + 1);
         this.currentTurretHeading = new Angle(value);
         this.newTurretHeading = new Angle(value);
 
