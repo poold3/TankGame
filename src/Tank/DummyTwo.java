@@ -100,9 +100,6 @@ public class DummyTwo extends ITank{
                 if (yChange < 0.0 && xChange > 0.0) {
                     theta += 180.0;
                 }
-                else if (yChange > 0.0 && xChange < 0.0) {
-                    theta += 360.0;
-                }
                 else if (yChange > 0.0 && xChange > 0.0) {
                     theta += 180.0;
                 }
