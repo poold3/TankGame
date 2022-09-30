@@ -56,9 +56,6 @@ public class DummyOne extends ITank{
                 if (yChange < 0 && xChange > 0) {
                     theta += 180;
                 }
-                else if (yChange > 0 && xChange < 0) {
-                    theta += 360;
-                }
                 else if (yChange > 0 && xChange > 0) {
                     theta += 180;
                 }
