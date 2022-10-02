@@ -35,7 +35,7 @@ public class GamePaint extends JPanel {
             //Get bullet position
             double[] position = bullet.getPosition();
             //Make bullet body
-            g2d.fillOval((int)Math.round(position[0] - Bullet.BULLET_RADIUS), (int)Math.round(position[1]), (int)Math.round(Bullet.BULLET_RADIUS * 2), (int)Math.round(Bullet.BULLET_RADIUS * 2));
+            g2d.fillOval((int)Math.round(position[0] - Bullet.BULLET_RADIUS), (int)Math.round(position[1] - Bullet.BULLET_RADIUS), (int)Math.round(Bullet.BULLET_RADIUS * 2), (int)Math.round(Bullet.BULLET_RADIUS * 2));
         }
 
         //Draw tanks
