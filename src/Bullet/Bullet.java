@@ -49,8 +49,8 @@ public class Bullet {
         return this.position;
     }
 
-    public Angle getHeading() {
-        return this.heading;
+    public double getHeading() {
+        return this.heading.getValue();
     }
 
     public int getBulletId() {
