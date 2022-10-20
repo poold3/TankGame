@@ -75,7 +75,7 @@ This method must be passed the Set of bullets that was passed into the `runTime(
 #### getPosition()
 This method returns an array size 2 of doubles containing the position of a bullet.
 #### getHeading()
-This method returns an Angle describing the direction the bullet is traveling.
+This method returns a double describing the direction/angle the bullet is traveling.
 #### getBulletId()
 This method returns an int which represents the bullet's unique id.
 ## Usable Angle Methods
