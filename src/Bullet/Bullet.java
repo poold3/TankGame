@@ -46,7 +46,7 @@ public class Bullet {
     }
 
     public double[] getPosition() {
-        return this.position;
+        return this.position.clone();
     }
 
     public double getHeading() {
