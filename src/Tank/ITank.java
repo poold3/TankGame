@@ -11,6 +11,7 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.UUID;
 
 import Game.*;
 import Bullet.Bullet;
@@ -27,6 +28,7 @@ public abstract class ITank {
     public static final double TANK_SPEED = 2.0;
     public static final int TURRET_COOLDOWN_MILLI = 2000;
     protected int health = 5;
+    protected String id = UUID.randomUUID().toString();
     protected driveDirection moving = driveDirection.None;
     protected double[] position;
     private double deltaX;
@@ -38,6 +40,12 @@ public abstract class ITank {
     protected Angle currentTurretHeading;
     protected Angle newTurretHeading;
 
+    /*
+    Returns an id that is guaranteed to be unique
+     */
+    public String getId() {
+        return this.id;
+    }
 
     /*
     Returns the health of the tank.

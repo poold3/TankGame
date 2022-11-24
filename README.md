@@ -39,6 +39,8 @@ called by the game. You should use the methods defined in `ITank.java` to help c
 your tank.
 ## Usable ITank Methods
 ### For All Tanks
+#### getId()
+This method returns an id generated for each tank that is guaranteed to be unique to that tank.
 #### getHealth()
 This method returns the current health of a tank. Each tank starts with 5 health points and
 loses 1 every time it is shot.
