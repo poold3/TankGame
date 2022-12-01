@@ -5,6 +5,7 @@ This is the angle class. Use the methods in this class to interact with angles. 
 package Game;
 
 public class Angle {
+    public static final double MAX_TURN_SPEED = 1.0;
     private double value;
 
     public Angle() {
@@ -47,8 +48,8 @@ public class Angle {
     //Make this 1 degree closer to Angle a
     public void update(Angle a) {
         double aValue = a.getValue();
-        //If difference between angles < 1.0, set this.value = aValue
-        if (Math.abs(this.value - aValue) < 1.0) {
+        //If difference between angles < MAX_TURN_SPEED, set this.value = aValue
+        if (Math.abs(this.value - aValue) < MAX_TURN_SPEED) {
             this.value = aValue;
             if (this.value >= 360.0) {
                 this.value -= 360.0;
@@ -78,7 +79,7 @@ public class Angle {
 
     //Rotate tank counter-clockwise by 1 degree
     private void increment() {
-        this.value = this.value + 1.0;
+        this.value = this.value + MAX_TURN_SPEED;
         if (this.value >= 360.0) {
             this.value -= 360.0;
         }
@@ -86,7 +87,7 @@ public class Angle {
 
     //Rotate tank clockwise by 1 degree
     private void decrement() {
-        this.value = this.value - 1.0;
+        this.value = this.value - MAX_TURN_SPEED;
         if (this.value < 0.0) {
             this.value += 360.0;
         }

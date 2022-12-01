@@ -106,3 +106,5 @@ The cooldown in milliseconds required after firing your turret before you can fi
 Defined in `ITank.java`.
 ### BULLET_SPEED
 The speed of each bullet. Defined in `Bullet.java`.
+### MAX_ROTATION_SPEED
+The max number of degrees that a turret or tank can turn every game tick. Defined in `Angle.java`.
