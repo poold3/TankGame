@@ -51,13 +51,23 @@ public class DummyOne extends ITank{
                 double[] targetPosition = tank.getPosition();
                 double xChange = this.position[0] - targetPosition[0];
                 double yChange = this.position[1] - targetPosition[1];
-                double theta = Math.toDegrees(Math.atan(yChange/xChange));
-
-                if (yChange < 0 && xChange > 0) {
-                    theta += 180;
+                double theta;
+                if (xChange == 0) {
+                    if (yChange >= 0) {
+                        theta = 270;
+                    }
+                    else {
+                        theta = 90;
+                    }
                 }
-                else if (yChange > 0 && xChange > 0) {
-                    theta += 180;
+                else {
+                    theta = Math.toDegrees(Math.atan(yChange/xChange));
+                    if (yChange < 0 && xChange > 0) {
+                        theta += 180;
+                    }
+                    else if (yChange > 0 && xChange > 0) {
+                        theta += 180;
+                    }
                 }
                 this.setNewTurretHeading(theta);
                 this.fireBullet(bullets);
