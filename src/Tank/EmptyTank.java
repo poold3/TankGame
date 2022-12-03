@@ -43,7 +43,7 @@ public class EmptyTank extends ITank{
     //REQUIRED!
     @Override
     public int hashCode() {
-        return this.tankName.hashCode();
+        return this.id.hashCode();
     }
 
     //IMPLEMENT YOUR runTime METHOD HERE!

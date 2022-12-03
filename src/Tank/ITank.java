@@ -39,6 +39,7 @@ public abstract class ITank {
     protected Angle previousHeading;
     protected Angle currentTurretHeading;
     protected Angle newTurretHeading;
+    private final double hit_circle_radius = Math.sqrt(Math.pow(ITank.TANK_WIDTH / 2.0, 2.0) + Math.pow(ITank.TANK_HEIGHT / 2.0, 2.0));
 
     /*
     Returns an id that is guaranteed to be unique
@@ -174,8 +175,7 @@ public abstract class ITank {
             double[] bulletPosition = bullet.getPosition();
 
             //Is this bullet in the near vicinity of this tank?
-            if (Math.abs(bulletPosition[0] - this.position[0]) < ITank.TANK_HEIGHT &&
-                    Math.abs(bulletPosition[1] - this.position[1]) < ITank.TANK_HEIGHT) {
+            if (distanceBetweenPositions(bulletPosition, this.position) <= hit_circle_radius) {
 
                 //Calculate new bullet position after rotation around center of tank by currentHeading
                 double bulletRotationRad = Math.toRadians(-1 * (90 - curAngleValue));
@@ -231,6 +231,12 @@ public abstract class ITank {
 
         }
 
+    }
+
+    private double distanceBetweenPositions(double[] positionOne, double[] positionTwo) {
+        double distanceX = Math.abs(positionOne[0] - positionTwo[0]);
+        double distanceY = Math.abs(positionOne[1] - positionTwo[1]);
+        return Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
     }
 
     @Override

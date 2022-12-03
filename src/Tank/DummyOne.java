@@ -34,7 +34,7 @@ public class DummyOne extends ITank{
 
     @Override
     public int hashCode() {
-        return this.tankName.hashCode();
+        return this.id.hashCode();
     }
     @Override
     public void runTime(ArrayList<ITank> tanks, HashSet<Bullet> bullets) {
