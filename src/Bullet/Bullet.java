@@ -61,4 +61,13 @@ public class Bullet {
         return bulletId;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() != Bullet.class) {
+            return false;
+        }
+        Bullet bullet = (Bullet) obj;
+        return this.bulletId == bullet.getBulletId();
+    }
+
 }
