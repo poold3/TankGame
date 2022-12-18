@@ -155,8 +155,8 @@ public abstract class ITank {
         if (curTime - this.lastBulletFired > TURRET_COOLDOWN_MILLI) {
             double curAngleValue = this.currentTurretHeading.getValue();
             double curAngleRad = Math.toRadians(curAngleValue);
-            double startY = ITank.TANK_HEIGHT * Math.sin(curAngleRad);
-            double startX = ITank.TANK_HEIGHT * Math.cos(curAngleRad);
+            double startY = (hit_circle_radius + 1) * Math.sin(curAngleRad);
+            double startX = (hit_circle_radius + 1) * Math.cos(curAngleRad);
             bullets.add(new Bullet(this.position[0] + startX, this.position[1] + startY, curAngleValue));
             this.lastBulletFired = curTime;
         }
